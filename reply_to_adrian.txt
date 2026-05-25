@@ -1,9 +1,12 @@
-Adrian, this gave me a more constructive idea than just asking ChatGPT whether immortality is likely.
+Adrian — love the LEV thread. Your post pushed me toward a small constructive idea instead of just asking ChatGPT whether immortality is likely.
 
-I’m cautious about LLMs as judges for something as big as LEV. But we could ask the same question to 50 models through OpenRouter and treat the result as a benchmark of how LLMs currently frame longevity claims — not as scientific proof.
+I'm cautious about treating any single LLM as a judge for something the size of LEV. But we *can* ask the same question to many models through OpenRouter and treat the result as a benchmark of how LLMs currently frame longevity claims — not as scientific proof, just as a consistency mirror for the movement.
 
-Then we could include toy claims next to serious ones: “I put more water in my coffee, therefore I’ll live longer,” “your fish dinners are probably beating my coffee-grog diet,” and “LEV by 2033.”
+I built a tiny version of this and ran the LEV plausibility question against 50 of the cheapest text models on OpenRouter today (total cost: about 1 cent). Of 45 that responded, only 7 leaned "likely / high probability" within this century. 30 framed it as "possible" or "unclear", and 8 leaned "low" or "near zero". So even with a budget that wouldn't buy you a coffee, you can see real spread in how AI talks about LEV.
 
-The useful output would be: does the model separate human evidence from mouse/cell evidence, biomarkers from hard endpoints, healthspan from lifespan, optimism from medical advice, and hope from hype?
+I also seeded two toy claims as calibration: "extra water in my coffee therefore I live longer" and "Adrian's fish dinners beat my coffee-grog diet." Good models should not over-medicalize the jokes but should still classify the structure of the claim.
 
-That feels like a better use of AI here: not oracle, but consistency mirror for the longevity movement.
+Repo (raw answers, prompts, sample run, methodology, related work):
+https://github.com/PaulTiffany/levbench-openrouter
+
+Not an oracle. A consistency mirror. Happy to add prompts you'd want to see asked.
