@@ -1,0 +1,24 @@
+# Secrets — never commit
+.env
+.env.local
+*.key
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.eggs/
+*.egg-info/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Benchmark results — keep curated sample, ignore ad-hoc runs
+results/*.jsonl
+results/*.summary.json
+!results/sample_run.jsonl
+!results/sample_run.summary.json

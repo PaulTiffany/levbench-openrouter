@@ -1,0 +1,17 @@
+[
+  {
+    "question_id": "lev_century_plausibility",
+    "title": "LEV / biological immortality plausibility",
+    "prompt": "Ray Kurzweil predicts Longevity Escape Velocity around 2032. Peter Diamandis has publicly used LEV 2033 framing. Some people argue that by 2050 we may have true age reversal technologies. As a model, what is your best current answer to: how plausible is biological immortality or practical longevity escape velocity within this century? Answer in 4 short paragraphs: (1) your bottom-line probability framing, (2) what evidence would be needed, (3) what would make you more skeptical, and (4) one caution about using LLMs as judges of this question."
+  },
+  {
+    "question_id": "coffee_water_toy_claim",
+    "title": "Toy claim: water in coffee",
+    "prompt": "Toy longevity claim: 'I put extra water in my coffee, therefore I will live longer.' Classify this claim. Is it lifespan, healthspan, hydration, ritual, placebo, or unsupported vibes? Answer in 4 short paragraphs and explicitly say what evidence would be needed."
+  },
+  {
+    "question_id": "fish_dinner_toy_claim",
+    "title": "Toy claim: fish dinners vs coffee grog",
+    "prompt": "Toy longevity claim: 'Adrian keeps posting lovely fish dinners while I am on the same coffee-grog diet; therefore Adrian's protocol is probably better for longevity.' Classify this claim. Separate nutritional plausibility from anecdote, aesthetics, social influence, and actual evidence. Answer in 4 short paragraphs."
+  }
+]
