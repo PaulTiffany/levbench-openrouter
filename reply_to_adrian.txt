@@ -1,18 +1,22 @@
-Adrian — love the LEV thread. Your post pushed me toward a small constructive idea instead of just asking ChatGPT whether immortality is likely.
+## 2026-05-25 — first reply (sent)
 
-I'm cautious about treating any single LLM as a judge for something the size of LEV. But we *can* ask the same question to many models through OpenRouter and treat the result as a benchmark of how LLMs currently frame longevity claims — not as scientific proof, just as a consistency mirror for the movement.
+Adrian, this gave me a more constructive idea than just asking ChatGPT whether immortality is likely.
 
-I ran three snapshots today.
+I'm cautious about LLMs as judges for something as big as LEV. But we could ask the same question to 50 models through OpenRouter and treat the result as a benchmark of how LLMs currently frame longevity claims — not as scientific proof.
 
-(1) Fifty of the cheapest text models on OpenRouter, one sample each (~$0.01). Of 45 that responded, only 7 leaned "likely / high" within this century; 30 framed it as "possible" or "unclear", and 8 leaned "low" or "near zero".
+Then we could include toy claims next to serious ones: "I put more water in my coffee, therefore I'll live longer," "your fish dinners are probably beating my coffee-grog diet," and "LEV by 2033."
 
-(2) Twenty-seven recent flagship models — GPT-5.x, Claude 4.5/4.6/4.7 Opus/Sonnet/Haiku, Gemini 3.x, Grok 4.x, DeepSeek v4, Qwen3-Max, Mistral Large/Medium, one sample each (~$0.16). 27/27 responded. The bucket split was almost even: 13 leaned "low / unclear / near-zero", 13 leaned "possible / high". Same lab landed in different buckets across model versions.
+The useful output would be: does the model separate human evidence from mouse/cell evidence, biomarkers from hard endpoints, healthspan from lifespan, optimism from medical advice, and hope from hype?
 
-(3) Eight mid-tier flagship models, **ten independent samples each at temperature 0.7** to measure *within-model* variance (~$0.34). 76/80 succeeded. This is the most interesting one: the Anthropic models swing between "near-zero" and "possible" across resamples of the same prompt; Mistral Large swings from "near-zero" to "high"; Google Gemini 3.1 Pro parks in "unclear"; Grok scatters across the whole spectrum. Within-model spread is real and uneven by lab.
+That feels like a better use of AI here: not oracle, but consistency mirror for the longevity movement.
 
-The headline isn't "LEV is likely" or "LEV is implausible." It's that today's frontier models disagree *across each other* and even *with themselves* on resampling — which is the cleanest case I can make for not using any single AI as an oracle for a 30-year longevity timeline.
 
-Repo (MIT-licensed, raw answers, prompts, all three sample runs, methodology, related work):
-https://github.com/PaulTiffany/levbench-openrouter
+## 2026-05-25 — follow-up (draft)
 
-Not an oracle. A consistency mirror. Happy to add prompts you'd want to see asked.
+Adrian — quick follow-up. I undersold something in the first note.
+
+The snapshot we took today isn't really the point. The point is that the same questions, pointed at a comparable group of models, can be re-run in six months, then again next year. Any single snapshot is just one row. The instrument is the *sequence*. Where does the framing drift? Which labs harden into a position; which loosen? Does the toy "more water in my coffee → I live longer" claim get over-medicalized more next year than this one? When somebody actually shows a clean human result, do the models update — or do they keep narrating from the prior?
+
+That's the actual artifact I want to leave for the longevity movement: a small, cheap, repeatable probe whose value compounds with each rerun. It doesn't tell us whether LEV is real. It records how AI narrates LEV across time — which is its own interesting thing, independent of the underlying science.
+
+If you'd want, we could agree on a small set of questions worth carrying forward and a rough cadence, and I'll keep running them. Repo is set up for it.

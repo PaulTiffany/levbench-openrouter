@@ -1,16 +1,19 @@
 # LEVBench OpenRouter
 
-A tiny, time-stamped benchmark that asks many OpenRouter models the same longevity / Longevity Escape Velocity (LEV) question and saves their raw answers as JSONL.
+A small, re-runnable instrument for sampling how LLMs frame longevity / Longevity Escape Velocity (LEV) claims **at a moment in time**, with the explicit intent to come back and sample again later.
 
-It is deliberately **not** an oracle for biological immortality. It is a *consistency probe*:
+The point isn't any single snapshot. The point is the sequence. One run is a row; the artifact gains value as the rows accumulate. Where does framing drift as models update? Which labs harden into a position; which loosen? When real human evidence lands, do model narrations update — or keep narrating from the prior?
 
-- What do current LLMs say when asked identical LEV / longevity questions?
-- Do they separate hope from clinical evidence?
-- Do they cite uncertainty?
-- Do they overclaim age reversal?
-- Do they distinguish mouse / cell / human evidence, biomarkers vs hard endpoints, lifespan vs healthspan?
+So this is not an oracle for biological immortality. It is a *longitudinal probe* whose unit of analysis is "the same prompts against a comparable model set, taken again." Each snapshot captures:
 
-See [`RELATED_WORK.md`](./RELATED_WORK.md) for positioning against existing longevity-LLM and LLM-as-judge work.
+- How current LLMs separate hope from clinical evidence
+- Whether they cite uncertainty, or smuggle confidence
+- Whether they overclaim age reversal
+- Whether they distinguish mouse / cell / human evidence, biomarkers vs hard endpoints, lifespan vs healthspan
+
+The reason to keep it tiny and cheap is precisely so it can be re-run. Three runs ship as seeds (see below); the value is in the fourth and the fortieth.
+
+See [`RELATED_WORK.md`](./RELATED_WORK.md) for positioning against existing longevity-LLM and LLM-as-judge work, especially the benchmark-aging literature that motivates this design.
 
 ## Setup
 
@@ -76,38 +79,40 @@ Each JSONL row contains:
 
 A `*.summary.json` companion file is written next to the output with counts per bucket.
 
-## Curated sample runs
+## Seed snapshots (2026-05-25)
 
-Three snapshots ship in the repo so you can see real output without spending anything:
+Three snapshots ship in the repo as the first row of the time series. They are seeds, not findings:
 
-- **`results/sample_run.jsonl`** — 50 cheapest text models, n=1, 2026-05-25 (~$0.01)
-- **`results/sample_flagship_run.jsonl`** — 27 recent flagship models from OpenAI, Anthropic, Google, xAI, DeepSeek, Qwen, Mistral, n=1, 2026-05-25 (~$0.16)
-- **`results/sample_variance_run.jsonl`** — 8 mid-tier flagship models × 10 samples each at temperature 0.7 to probe *within-model* variance, 2026-05-25 (~$0.34)
+- **`results/sample_run.jsonl`** — 50 cheapest text models, n=1 (~$0.01)
+- **`results/sample_flagship_run.jsonl`** — 27 recent flagship models from OpenAI, Anthropic, Google, xAI, DeepSeek, Qwen, Mistral, n=1 (~$0.16)
+- **`results/sample_variance_run.jsonl`** — 8 mid-tier flagship models × 10 samples each at temperature 0.7 to estimate *within-model* spread at this moment (~$0.34)
 
-Model lists: [`flagship_models.txt`](./flagship_models.txt), [`variance_models.txt`](./variance_models.txt). To rerun the variance experiment:
+Model lists are committed alongside ([`flagship_models.txt`](./flagship_models.txt), [`variance_models.txt`](./variance_models.txt)) so future runs can target a comparable set. Drift in the model list itself is part of the signal: when a flagship is deprecated and a successor takes its slot, *that* is a data point about the field.
+
+To rerun:
 
 ```bash
 python levbench_openrouter.py --models-file variance_models.txt --max-models 100 --n-samples 10 --out results/lev_variance.jsonl
 ```
 
-## What the sample runs show
+## What a single snapshot can and can't show
 
-For the headline LEV-this-century question, neither the cheap-models nor the flagship sample produces a clean consensus. In the 27-flagship snapshot the rough-bucket split was roughly even between "low / unclear / near-zero" and "possible / high" — the same lab can land in different buckets across model versions.
+A single run shows where today's models *currently land* on the LEV plausibility question. It cannot show movement; movement only appears across runs. So the headline interpretation of any single snapshot here is intentionally thin: today's frontier models do not converge on a probability for LEV-this-century, and the same model can land in different buckets across resamples of the same prompt. The variance is real; the trajectory is what's worth measuring next.
 
-The 8×10 variance snapshot is more revealing. With temperature 0.7 and ten independent samples per model:
+For reference, the 8×10 seed run produced this within-model bucket distribution:
 
 | Model | near_zero | low | unclear | possible | high |
 |---|---|---|---|---|---|
-| anthropic/claude-haiku-4.5 | **6** | 0 | 0 | **4** | 0 |
-| anthropic/claude-sonnet-4.6 | **5** | 0 | 0 | 2 | 1 |
-| deepseek/deepseek-v4-pro | 0 | 0 | **7** | 3 | 0 |
-| google/gemini-3.1-pro-preview | 0 | 0 | **8** | 2 | 0 |
-| mistralai/mistral-large-2512 | 2 | 0 | 0 | 3 | **5** |
-| openai/gpt-5.4-mini | 0 | 2 | 0 | **6** | 0 |
-| qwen/qwen3-max | 0 | 4 | 1 | **5** | 0 |
+| anthropic/claude-haiku-4.5 | 6 | 0 | 0 | 4 | 0 |
+| anthropic/claude-sonnet-4.6 | 5 | 0 | 0 | 2 | 1 |
+| deepseek/deepseek-v4-pro | 0 | 0 | 7 | 3 | 0 |
+| google/gemini-3.1-pro-preview | 0 | 0 | 8 | 2 | 0 |
+| mistralai/mistral-large-2512 | 2 | 0 | 0 | 3 | 5 |
+| openai/gpt-5.4-mini | 0 | 2 | 0 | 6 | 0 |
+| qwen/qwen3-max | 0 | 4 | 1 | 5 | 0 |
 | x-ai/grok-4.20 | 2 | 0 | 4 | 1 | 3 |
 
-The Anthropic models swing **near-zero ↔ possible** across samples; Mistral Large swings **near-zero → high**; Google parks in "unclear"; Grok scatters across the whole spectrum. Within-model spread is real and uneven by lab. The non-consensus is the point.
+These numbers are the *first* row. The interesting question is what they look like when the same prompt and a comparable model set are sampled again next quarter, and the quarter after that.
 
 ## License
 
@@ -115,7 +120,7 @@ MIT — see [LICENSE](./LICENSE).
 
 ## Caveats
 
-- This is a toy. Model consensus is not scientific consensus.
+- This is a toy. Model consensus is not scientific consensus, and a model's framing of LEV is not evidence about LEV.
 - Heuristic tags are regex-based; they measure rhetoric, not truth.
-- OpenRouter routing, pricing, and model versions drift. Every run captures a moment.
+- OpenRouter routing, pricing, and model versions drift. That drift is the thing being measured — each run captures a moment, on purpose.
 - Do not treat any output here as medical advice.
