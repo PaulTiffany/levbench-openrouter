@@ -2,11 +2,15 @@ Adrian — love the LEV thread. Your post pushed me toward a small constructive 
 
 I'm cautious about treating any single LLM as a judge for something the size of LEV. But we *can* ask the same question to many models through OpenRouter and treat the result as a benchmark of how LLMs currently frame longevity claims — not as scientific proof, just as a consistency mirror for the movement.
 
-I built a tiny version of this and ran the LEV plausibility question against 50 of the cheapest text models on OpenRouter today (total cost: about 1 cent). Of 45 that responded, only 7 leaned "likely / high probability" within this century. 30 framed it as "possible" or "unclear", and 8 leaned "low" or "near zero". So even with a budget that wouldn't buy you a coffee, you can see real spread in how AI talks about LEV.
+I built a tiny version of this and ran two snapshots today. First, against 50 of the cheapest text models on OpenRouter (~$0.01): of 45 that responded, only 7 leaned "likely / high" within this century, while 30 framed it as "possible" or "unclear" and 8 leaned "low" or "near zero".
+
+Then a second run against 27 *recent flagship* models — GPT-5.x, Claude 4.5/4.6/4.7 Opus/Sonnet/Haiku, Gemini 3.x, Grok 4.x, DeepSeek v4, Qwen3-Max, Mistral Large/Medium (~$0.16). All 27 responded, and the split was almost even: 13 leaned "low / unclear / near-zero", 13 leaned "possible / high". Even the same lab landed in different buckets across model versions.
+
+So even with budget that wouldn't buy you a coffee, you can see real spread in how today's frontier AI talks about LEV. The non-consensus is the finding.
 
 I also seeded two toy claims as calibration: "extra water in my coffee therefore I live longer" and "Adrian's fish dinners beat my coffee-grog diet." Good models should not over-medicalize the jokes but should still classify the structure of the claim.
 
-Repo (raw answers, prompts, sample run, methodology, related work):
+Repo (MIT-licensed, raw answers, prompts, both sample runs, methodology, related work):
 https://github.com/PaulTiffany/levbench-openrouter
 
 Not an oracle. A consistency mirror. Happy to add prompts you'd want to see asked.

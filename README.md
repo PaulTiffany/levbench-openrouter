@@ -76,9 +76,26 @@ Each JSONL row contains:
 
 A `*.summary.json` companion file is written next to the output with counts per bucket.
 
-## A curated sample run lives in `results/sample_run.jsonl`
+## Curated sample runs
 
-So you can see the shape of the output without spending anything.
+Two snapshots ship in the repo so you can see real output without spending anything:
+
+- **`results/sample_run.jsonl`** — 50 cheapest text models, 2026-05-25 (~$0.01)
+- **`results/sample_flagship_run.jsonl`** — 27 recent flagship models from OpenAI, Anthropic, Google, xAI, DeepSeek, Qwen, Mistral, 2026-05-25 (~$0.16)
+
+The flagship list is in [`flagship_models.txt`](./flagship_models.txt). To rerun it:
+
+```bash
+python levbench_openrouter.py --models-file flagship_models.txt --max-models 100 --out results/lev_flagship.jsonl
+```
+
+## What the sample runs show
+
+For the headline LEV-this-century question, neither sample produces a clean consensus. In the flagship snapshot of 27 frontier models, the rough-bucket split was roughly even between "low / unclear / near-zero" and "possible / high" — the same lab can land in different buckets across model versions. That non-consensus is the point: this benchmark surfaces disagreement rather than papering it over.
+
+## License
+
+MIT — see [LICENSE](./LICENSE).
 
 ## Caveats
 

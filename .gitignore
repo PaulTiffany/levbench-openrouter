@@ -17,8 +17,10 @@ venv/
 .DS_Store
 Thumbs.db
 
-# Benchmark results — keep curated sample, ignore ad-hoc runs
+# Benchmark results — keep curated samples, ignore ad-hoc runs
 results/*.jsonl
 results/*.summary.json
 !results/sample_run.jsonl
 !results/sample_run.summary.json
+!results/sample_flagship_run.jsonl
+!results/sample_flagship_run.summary.json
