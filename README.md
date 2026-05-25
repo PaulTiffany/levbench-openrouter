@@ -78,20 +78,36 @@ A `*.summary.json` companion file is written next to the output with counts per 
 
 ## Curated sample runs
 
-Two snapshots ship in the repo so you can see real output without spending anything:
+Three snapshots ship in the repo so you can see real output without spending anything:
 
-- **`results/sample_run.jsonl`** — 50 cheapest text models, 2026-05-25 (~$0.01)
-- **`results/sample_flagship_run.jsonl`** — 27 recent flagship models from OpenAI, Anthropic, Google, xAI, DeepSeek, Qwen, Mistral, 2026-05-25 (~$0.16)
+- **`results/sample_run.jsonl`** — 50 cheapest text models, n=1, 2026-05-25 (~$0.01)
+- **`results/sample_flagship_run.jsonl`** — 27 recent flagship models from OpenAI, Anthropic, Google, xAI, DeepSeek, Qwen, Mistral, n=1, 2026-05-25 (~$0.16)
+- **`results/sample_variance_run.jsonl`** — 8 mid-tier flagship models × 10 samples each at temperature 0.7 to probe *within-model* variance, 2026-05-25 (~$0.34)
 
-The flagship list is in [`flagship_models.txt`](./flagship_models.txt). To rerun it:
+Model lists: [`flagship_models.txt`](./flagship_models.txt), [`variance_models.txt`](./variance_models.txt). To rerun the variance experiment:
 
 ```bash
-python levbench_openrouter.py --models-file flagship_models.txt --max-models 100 --out results/lev_flagship.jsonl
+python levbench_openrouter.py --models-file variance_models.txt --max-models 100 --n-samples 10 --out results/lev_variance.jsonl
 ```
 
 ## What the sample runs show
 
-For the headline LEV-this-century question, neither sample produces a clean consensus. In the flagship snapshot of 27 frontier models, the rough-bucket split was roughly even between "low / unclear / near-zero" and "possible / high" — the same lab can land in different buckets across model versions. That non-consensus is the point: this benchmark surfaces disagreement rather than papering it over.
+For the headline LEV-this-century question, neither the cheap-models nor the flagship sample produces a clean consensus. In the 27-flagship snapshot the rough-bucket split was roughly even between "low / unclear / near-zero" and "possible / high" — the same lab can land in different buckets across model versions.
+
+The 8×10 variance snapshot is more revealing. With temperature 0.7 and ten independent samples per model:
+
+| Model | near_zero | low | unclear | possible | high |
+|---|---|---|---|---|---|
+| anthropic/claude-haiku-4.5 | **6** | 0 | 0 | **4** | 0 |
+| anthropic/claude-sonnet-4.6 | **5** | 0 | 0 | 2 | 1 |
+| deepseek/deepseek-v4-pro | 0 | 0 | **7** | 3 | 0 |
+| google/gemini-3.1-pro-preview | 0 | 0 | **8** | 2 | 0 |
+| mistralai/mistral-large-2512 | 2 | 0 | 0 | 3 | **5** |
+| openai/gpt-5.4-mini | 0 | 2 | 0 | **6** | 0 |
+| qwen/qwen3-max | 0 | 4 | 1 | **5** | 0 |
+| x-ai/grok-4.20 | 2 | 0 | 4 | 1 | 3 |
+
+The Anthropic models swing **near-zero ↔ possible** across samples; Mistral Large swings **near-zero → high**; Google parks in "unclear"; Grok scatters across the whole spectrum. Within-model spread is real and uneven by lab. The non-consensus is the point.
 
 ## License
 

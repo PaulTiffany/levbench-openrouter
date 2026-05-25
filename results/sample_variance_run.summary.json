@@ -1,0 +1,12 @@
+{
+  "total_rows": 80,
+  "successful": 76,
+  "errors": 4,
+  "rough_probability_buckets": {
+    "possible": 26,
+    "low": 6,
+    "near_zero": 15,
+    "high": 9,
+    "unclear": 20
+  }
+}

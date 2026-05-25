@@ -1,0 +1,12 @@
+# 8 models for the within-model variance experiment.
+# Spread across major labs at mid-tier pricing.
+# Used with --n-samples 10 and temperature 0.7.
+
+openai/gpt-5.4-mini
+anthropic/claude-sonnet-4.6
+anthropic/claude-haiku-4.5
+google/gemini-3.1-pro-preview
+x-ai/grok-4.20
+deepseek/deepseek-v4-pro
+qwen/qwen3-max
+mistralai/mistral-large-2512

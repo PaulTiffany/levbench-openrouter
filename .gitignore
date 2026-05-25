@@ -24,3 +24,5 @@ results/*.summary.json
 !results/sample_run.summary.json
 !results/sample_flagship_run.jsonl
 !results/sample_flagship_run.summary.json
+!results/sample_variance_run.jsonl
+!results/sample_variance_run.summary.json

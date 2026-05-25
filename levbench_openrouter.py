@@ -141,23 +141,30 @@ def load_models_file(path: Path) -> List[str]:
     return lines
 
 
-def call_model(model: str, prompt: str, max_tokens: int, timeout: int) -> Dict[str, Any]:
+def call_model(model: str, prompt: str, max_tokens: int, timeout: int, temperature: float = 0.0) -> Dict[str, Any]:
     payload = {
         "model": model,
         "messages": [
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": prompt},
         ],
-        "temperature": 0,
+        "temperature": temperature,
         "max_tokens": max_tokens,
     }
     started = time.time()
-    r = requests.post(
-        f"{OPENROUTER_BASE}/chat/completions",
-        headers=auth_headers(),
-        json=payload,
-        timeout=timeout,
-    )
+    try:
+        r = requests.post(
+            f"{OPENROUTER_BASE}/chat/completions",
+            headers=auth_headers(),
+            json=payload,
+            timeout=timeout,
+        )
+    except requests.exceptions.RequestException as exc:
+        return {
+            "model": model,
+            "elapsed_seconds": round(time.time() - started, 3),
+            "error": {"exception": type(exc).__name__, "message": str(exc)[:500]},
+        }
     elapsed = time.time() - started
     if r.status_code >= 400:
         return {
@@ -257,6 +264,8 @@ def main(argv: Optional[Iterable[str]] = None) -> int:
     parser.add_argument("--max-tokens", type=int, default=700, help="Max output tokens per model")
     parser.add_argument("--timeout", type=int, default=90, help="HTTP timeout seconds per model")
     parser.add_argument("--sleep", type=float, default=0.5, help="Seconds between model calls")
+    parser.add_argument("--n-samples", type=int, default=1, help="Independent samples per model (for within-model variance)")
+    parser.add_argument("--temperature", type=float, default=None, help="Sampling temperature. Default: 0.0 if n-samples==1 else 0.7")
     parser.add_argument("--dry-run", action="store_true", help="List selected models only")
     parser.add_argument("--out", default="results/levbench_results.jsonl", help="Output JSONL path")
     parser.add_argument("--env-file", help="Path to a .env file to load OPENROUTER_API_KEY from")
@@ -293,22 +302,29 @@ def main(argv: Optional[Iterable[str]] = None) -> int:
 
     out_path = Path(args.out)
     prompt = question["prompt"]
+    temperature = args.temperature if args.temperature is not None else (0.0 if args.n_samples == 1 else 0.7)
+    total_calls = len(model_ids) * args.n_samples
+    call_idx = 0
 
-    for i, model in enumerate(model_ids, start=1):
-        print(f"[{i}/{len(model_ids)}] {model}", flush=True)
-        result = call_model(model, prompt, max_tokens=args.max_tokens, timeout=args.timeout)
-        row = {
-            "question_id": question["question_id"],
-            "question_title": question.get("title"),
-            "model": model,
-            **result,
-        }
-        if not row.get("error"):
-            tags = heuristic_tags(row.get("response_text", ""))
-            row["heuristic_tags"] = tags
-            row["rough_probability_bucket"] = rough_probability_bucket(row.get("response_text", ""))
-        write_jsonl_row(out_path, row)
-        time.sleep(args.sleep)
+    for model in model_ids:
+        for sample_idx in range(args.n_samples):
+            call_idx += 1
+            print(f"[{call_idx}/{total_calls}] {model} (sample {sample_idx + 1}/{args.n_samples})", flush=True)
+            result = call_model(model, prompt, max_tokens=args.max_tokens, timeout=args.timeout, temperature=temperature)
+            row = {
+                "question_id": question["question_id"],
+                "question_title": question.get("title"),
+                "model": model,
+                "sample_idx": sample_idx,
+                "temperature": temperature,
+                **result,
+            }
+            if not row.get("error"):
+                tags = heuristic_tags(row.get("response_text", ""))
+                row["heuristic_tags"] = tags
+                row["rough_probability_bucket"] = rough_probability_bucket(row.get("response_text", ""))
+            write_jsonl_row(out_path, row)
+            time.sleep(args.sleep)
 
     summary = summarize_jsonl(out_path)
     summary_path = out_path.with_suffix(".summary.json")
